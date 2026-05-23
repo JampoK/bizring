@@ -1,31 +1,50 @@
 import Link from 'next/link'
 import LogoutButton from './logout-button'
 
+const navItems = [
+  { href: '/dashboard', label: 'Overview' },
+  { href: '/dashboard/data-rooms', label: 'Data Rooms' },
+  { href: '/dashboard/settings', label: 'Settings' },
+]
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen flex">
-      <aside className="w-64 border-r p-6 bg-gray-50">
-        <nav className="space-y-4">
-          <div className="font-bold text-lg mb-4">Dashboard</div>
-          <Link href="/dashboard" className="block text-gray-700 hover:text-primary">
-            Overview
+    <div className="min-h-screen flex bg-canvas">
+      <aside className="w-64 bg-fog-gray flex flex-col">
+        <div className="p-6">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-midnight-ink rounded-sm flex items-center justify-center">
+              <span className="text-surface-white font-bold text-sm">B</span>
+            </div>
+            <span className="text-lg font-bold text-midnight-ink">BizRing</span>
           </Link>
-          <Link href="/dashboard/data-rooms" className="block text-gray-700 hover:text-primary">
-            Data Rooms
-          </Link>
-          <Link href="/dashboard/settings" className="block text-gray-700 hover:text-primary">
-            Settings
-          </Link>
-          <div className="mt-8">
-            <LogoutButton />
-          </div>
+        </div>
+
+        <nav className="flex-1 px-4">
+          <p className="px-4 text-xs font-medium text-stone-whisper uppercase tracking-[0.017px] mb-2">Menu</p>
+          <ul className="space-y-1">
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="block px-4 py-2.5 text-sm text-oceanic-deep rounded-sm hover:bg-canvas transition-colors tracking-[0.014px]"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
+
+        <div className="p-4 border-t border-ash-cloud">
+          <LogoutButton />
+        </div>
       </aside>
-      <main className="flex-grow p-8">{children}</main>
+      <main className="flex-1">{children}</main>
     </div>
   )
 }
