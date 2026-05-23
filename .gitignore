@@ -1,0 +1,50 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build outputs
+.next
+out
+dist
+build
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Vercel
+.vercel
+
+# Hermes
+.hermes
+
+# Configs with secrets
+configs/
+
+# Temp
+tmp
+*.tmp
+
+# Package manager caches (large files)
+.npm
+.local/share/pnpm/
+.pnpm-store/
+
+# Large tool caches
+.cache/

@@ -1,0 +1,1 @@
+{"pid": 17928, "kind": "hermes-gateway", "argv": ["/home/ubuntu/hermes-venv/bin/hermes", "gateway"], "start_time": 1575736, "scope": "discord-bot-token", "identity_hash": "d7ec54638f19178e", "metadata": {"platform": "discord"}, "updated_at": "2026-05-20T11:41:59.378629+00:00"}

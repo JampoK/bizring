@@ -1,0 +1,5 @@
+[user]
+	email = dev@bizring.com
+	name = BizRing Dev
+[credential]
+	helper = store

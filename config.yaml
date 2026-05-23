@@ -1,0 +1,4 @@
+web:
+  backend: "firecrawl"
+  search_backend: "firecrawl"
+  extract_backend: "firecrawl"

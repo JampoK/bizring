@@ -1,0 +1,61 @@
+{
+  "rule_ids": [
+    "raw_ip_url",
+    "plain_http_to_sink",
+    "raw_ip_url",
+    "plain_http_to_sink"
+  ],
+  "severity": "HIGH",
+  "command_redacted": "curl -s --max-time 10 http://15.134.225.19/api/health 2>&1 && echo \"\" && curl -s...",
+  "findings": [
+    {
+      "rule_id": "raw_ip_url",
+      "severity": "MEDIUM",
+      "title": "URL uses raw IP address",
+      "description": "URL points to IP address 15.134.225.19 instead of a domain name",
+      "evidence": [
+        {
+          "type": "url",
+          "raw": "15.134.225.19"
+        }
+      ]
+    },
+    {
+      "rule_id": "plain_http_to_sink",
+      "severity": "HIGH",
+      "title": "Plain HTTP URL in execution context",
+      "description": "URL 'http://15.134.225.19/api/health' uses unencrypted HTTP and is being passed to a command that downloads or executes content. An attacker on the network could modify the content.",
+      "evidence": [
+        {
+          "type": "url",
+          "raw": "http://15.134.225.19/api/health"
+        }
+      ]
+    },
+    {
+      "rule_id": "raw_ip_url",
+      "severity": "MEDIUM",
+      "title": "URL uses raw IP address",
+      "description": "URL points to IP address 15.134.225.19 instead of a domain name",
+      "evidence": [
+        {
+          "type": "url",
+          "raw": "15.134.225.19"
+        }
+      ]
+    },
+    {
+      "rule_id": "plain_http_to_sink",
+      "severity": "HIGH",
+      "title": "Plain HTTP URL in execution context",
+      "description": "URL 'http://15.134.225.19/api/health' uses unencrypted HTTP and is being passed to a command that downloads or executes content. An attacker on the network could modify the content.",
+      "evidence": [
+        {
+          "type": "url",
+          "raw": "http://15.134.225.19/api/health"
+        }
+      ]
+    }
+  ],
+  "timestamp": "2026-05-23T09:34:19.599388869+00:00"
+}
