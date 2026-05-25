@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { Card } from '@/components/ui/card'
+import { Card } from '@/components/ui/ContentCard'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import LogoutButton from '@/app/(dashboard)/logout-button'

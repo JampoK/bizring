@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { Card } from '@/components/ui/card'
+import { Card } from '@/components/ui/ContentCard'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Shell } from '@/components/ui/shell'
+import { Container as Shell } from '@/components/ui/Container'
 
 interface Business {
   id: string
