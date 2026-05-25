@@ -7,8 +7,13 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import { Users } from './collections/Users'
 import { Businesses } from './collections/Businesses'
+import { FranchiseOpportunities } from './collections/FranchiseOpportunities'
+import { VerificationDocuments } from './collections/VerificationDocuments'
 import { DataRooms } from './collections/DataRooms'
 import { Media } from './collections/Media'
+import Categories from './collections/Categories'
+import Locations from './collections/Locations'
+import { Insights } from './collections/Insights'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -20,7 +25,17 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Businesses, DataRooms, Media],
+  collections: [
+    Users,
+    Businesses,
+    FranchiseOpportunities,
+    VerificationDocuments,
+    DataRooms,
+    Media,
+    Categories,
+    Locations,
+    Insights,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -30,7 +45,7 @@ export default buildConfig({
     pool: {
       connectionString:
         process.env.DATABASE_URL ||
-        `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/bizring`,
+        `postgres://${process.env.DB_USER}:***@${process.env.DB_HOST}:${process.env.DB_PORT}/bizring`,
     },
   }),
   cors: [
@@ -42,21 +57,4 @@ export default buildConfig({
     'http://localhost:3001',
   ],
   cookiePrefix: 'bizring-payload',
-  // S3 Storage adapter - enable by setting AWS_* env vars
-  // Uncomment below and install @payloadcms/storage-s3 to activate:
-  // plugins: [
-  //   s3Storage({
-  //     collections: {
-  //       media: true,
-  //     },
-  //     bucket: process.env.AWS_S3_BUCKET!,
-  //     config: {
-  //       credentials: {
-  //         accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-  //         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-  //       },
-  //       region: process.env.AWS_REGION || 'us-east-1',
-  //     },
-  //   }),
-  // ],
 })

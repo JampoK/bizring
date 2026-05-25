@@ -4,30 +4,33 @@ import config from '../payload.config'
 const main = async () => {
   const payload = await getPayload({ config })
 
-  const count = await payload.count({
-    collection: 'users',
-    where: { email: { equals: 'admin@bizring.com' } },
-  })
-
-  if (count.totalDocs === 0) {
-    const admin = await payload.create({
-      collection: 'users',
-      data: {
-        name: 'Admin User',
-        email: 'admin@bizring.com',
-        password: 'admin123456',
-        roles: ['admin'],
-      },
-    })
-    console.log('✅ Admin created:', admin.email)
-  } else {
-    console.log('ℹ️  Admin already exists')
+  // 1. Reset/Create Admin
+  const adminExists = await payload.count({ collection: 'users', where: { email: { equals: 'admin@bizring.com' } } })
+  if (adminExists.totalDocs === 0) {
+    await payload.create({ collection: 'users', data: { name: 'Admin', email: 'admin@bizring.com', password: 'admin123456', roles: ['admin'] } })
   }
 
+  // 2. Create Dummy Business Owner
+  const owner = await payload.create({
+    collection: 'users',
+    data: { name: 'Franchise Owner', email: 'owner@bizring.com', password: 'password123', roles: ['user'] }
+  })
+
+  // 3. Create Dummy Business
+  const business = await payload.create({
+    collection: 'businesses',
+    data: {
+      name: 'Kopi Nusantara',
+      slug: 'kopi-nusantara',
+      category: 'Kuliner',
+      location: 'Jakarta',
+      status: 'verified',
+      owner: owner.id,
+    }
+  })
+
+  console.log('✅ Seed data created')
   process.exit(0)
 }
 
-main().catch((e) => {
-  console.error(e)
-  process.exit(1)
-})
+main().catch((e) => { console.error(e); process.exit(1) })

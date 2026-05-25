@@ -1,40 +1,40 @@
-import { getPayloadClient } from '../lib/payload-client';
-import { PublicBusinessDTO } from './types';
+import { getPayloadClient } from '../lib/payload-client'
+import { PublicBusinessDTO } from './types'
 
-export const getPublicBusinesses = async (query: {
-  page?: number;
-  limit?: number;
-  industry?: string;
-}): Promise<{ docs: PublicBusinessDTO[]; meta: any }> => {
-  const payload = await getPayloadClient();
+export async function getPublicBusinesses(params: { 
+  category?: string
+  location?: string 
+  page?: number 
+}) {
+  const payload = await getPayloadClient()
   
-  if (!payload) throw new Error('Failed to connect to backend');
-
   const result = await payload.find({
     collection: 'businesses',
     where: {
-      status: { equals: 'published' },
-      ...(query.industry ? { industry: { equals: query.industry } } : {}),
+      status: { equals: 'verified' },
+      ...(params.category && { category: { equals: params.category } }),
+      ...(params.location && { location: { equals: params.location } }),
     },
-    sort: '-isFeatured -createdAt',
-    limit: query.limit || 20,
-    page: query.page || 1,
-    // Enforce safe projection to only expose public DTO fields
-    select: {
+    select: { // Projection untuk keamanan DTO
       name: true,
       slug: true,
-      industry: true,
-      isVerified: true,
-      isFeatured: true,
-    }
-  });
-
+      category: true,
+      location: true,
+      intents: true,
+      contact: true,
+      trust: true,
+      isPremium: true,
+    },
+    limit: 12,
+    page: params.page || 1,
+  })
+  
   return {
-    docs: result.docs as unknown as PublicBusinessDTO[],
+    data: result.docs as unknown as PublicBusinessDTO[],
     meta: {
       totalDocs: result.totalDocs,
       limit: result.limit,
-      page: result.page,
+      page: result.page || 1,
     }
-  };
-};
+  }
+}

@@ -1,95 +1,60 @@
+import React from 'react'
+import { Container } from '@/components/ui/Container'
+import { ContentCard } from '@/components/ui/ContentCard'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/Badge'
 import Link from 'next/link'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Shell } from '@/components/ui/shell'
 
-interface Business {
-  id: string
-  name: string
-  slug: string
-  tagline: string
-  description: string
-  industry: string
-  stage: string
-  location: string
-  verificationStatus: string
-  fundingGoal: number
-  fundingRaised: number
-  teamSize: number
-  foundedYear: number
-  website: string
+// Server-side fetch dummy untuk sementara (segera diganti Payload client)
+async function getBusinesses(filters: { minInvestment?: number, province?: string }) {
+  // Simulasi query Payload
+  return [
+    { id: '1', name: 'Warung Kopi Nusantara', minInvestment: 100000000, province: 'Jawa Barat', category: 'Franchise', slug: 'warung-kopi-nusantara' },
+    { id: '2', name: 'Laundry Expressindo', minInvestment: 50000000, province: 'DKI Jakarta', category: 'Franchise', slug: 'laundry-expressindo' },
+  ]
 }
 
-async function getBusinesses(): Promise<Business[]> {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/businesses`, {
-      next: { revalidate: 60 },
-    })
-    if (!res.ok) return []
-    return res.json()
-  } catch {
-    return []
-  }
-}
-
-export default async function DirectoryPage() {
-  const businesses = await getBusinesses()
+export default async function DirectoryPage({ searchParams }: { searchParams: { minInvestment?: string, province?: string } }) {
+  const minInvestment = searchParams.minInvestment ? parseInt(searchParams.minInvestment) : undefined
+  const province = searchParams.province
+  
+  const businesses = await getBusinesses({ minInvestment, province })
 
   return (
-    <div className="bg-canvas">
-      <Shell>
-        <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-midnight-ink tracking-[0.006px]">Business Directory</h1>
-          <p className="text-slate-grille mt-2 tracking-[0.013px]">
-            Discover innovative businesses and investment opportunities
-          </p>
-        </div>
+    <Container className="py-12 space-y-8">
+      <h1 className="text-display">Direktori Bisnis Indonesia</h1>
+      
+      {/* Filter Sidebar Placeholder */}
+      <div className="flex gap-4 mb-8">
+        <select className="border p-2 rounded">
+          <option>Semua Provinsi</option>
+          <option>DKI Jakarta</option>
+          <option>Jawa Barat</option>
+        </select>
+        <select className="border p-2 rounded">
+          <option>Semua Investasi</option>
+          <option>&lt; 100 Juta</option>
+          <option>100 - 500 Juta</option>
+        </select>
+      </div>
 
-        {businesses.length === 0 ? (
-          <Card className="p-12 text-center">
-            <p className="text-slate-grille text-lg">No businesses listed yet.</p>
-            <p className="text-stone-whisper text-sm mt-2">
-              Be the first to{' '}
-              <Link href="/register" className="text-deep-teal hover:underline">
-                register your business
-              </Link>
-              .
-            </p>
-          </Card>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {businesses.map((business) => (
-              <Link key={business.id} href={`/business/${business.slug}`}>
-                <Card className="h-full cursor-pointer">
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-3">
-                      <h2 className="text-lg font-semibold text-midnight-ink">{business.name}</h2>
-                      <Badge
-                        variant={
-                          business.verificationStatus === 'verified'
-                            ? 'success'
-                            : 'default'
-                        }
-                      >
-                        {business.verificationStatus}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-slate-grille mb-2 tracking-[0.014px]">{business.tagline}</p>
-                    <p className="text-sm text-stone-whisper line-clamp-2 mb-4 tracking-[0.014px]">
-                      {business.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 text-[0.75rem] text-stone-whisper tracking-[0.017px]">
-                      {business.industry && <span>{business.industry}</span>}
-                      {business.stage && <span>• {business.stage}</span>}
-                      {business.location && <span>• {business.location}</span>}
-                    </div>
-                  </div>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        )}
-      </Shell>
-    </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {businesses.map((b) => (
+          <ContentCard key={b.id} className="flex flex-col justify-between">
+            <div>
+              <div className="flex justify-between items-start mb-2">
+                <h2 className="text-heading-sm">{b.name}</h2>
+                <Badge variant="default">{b.category}</Badge>
+              </div>
+              <p className="text-body text-ash-cloud">Lokasi: {b.province}</p>
+              <p className="text-body text-midnight-ink font-semibold mt-2">Mulai dari: {b.minInvestment.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</p>
+            </div>
+            <Link href={`/business/${b.slug}`} className="mt-4">
+              <Button variant="primary" className="w-full">Lihat Peluang</Button>
+            </Link>
+          </ContentCard>
+        ))}
+      </div>
+    </Container>
   )
 }

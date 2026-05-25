@@ -1,10 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
+import { NavLink } from '@/components/ui/NavLink'
+import { Container } from '@/components/ui/Container' // Import Container
 
 export function Footer() {
   return (
     <footer className="bg-midnight-ink text-ash-cloud">
-      <div className="container-default py-16">
+      <Container className="py-16">
         <div className="grid gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="md:col-span-1">
@@ -23,9 +25,9 @@ export function Footer() {
           <div>
             <h4 className="text-[0.875rem] font-semibold text-surface-white mb-4 uppercase tracking-[0.014px]">Product</h4>
             <ul className="space-y-3 text-[0.875rem] tracking-[0.014px]">
-              <li><Link href="/directory" className="hover:text-surface-white transition-colors">Directory</Link></li>
-              <li><Link href="/#features" className="hover:text-surface-white transition-colors">Features</Link></li>
-              <li><Link href="/#data-rooms" className="hover:text-surface-white transition-colors">Data Rooms</Link></li>
+              <li><NavLink href="/directory" className="hover:text-surface-white transition-colors">Directory</NavLink></li>
+              <li><NavLink href="/#features" className="hover:text-surface-white transition-colors">Features</NavLink></li>
+              <li><NavLink href="/#data-rooms" className="hover:text-surface-white transition-colors">Data Rooms</NavLink></li>
             </ul>
           </div>
 
@@ -33,9 +35,9 @@ export function Footer() {
           <div>
             <h4 className="text-[0.875rem] font-semibold text-surface-white mb-4 uppercase tracking-[0.014px]">Company</h4>
             <ul className="space-y-3 text-[0.875rem] tracking-[0.014px]">
-              <li><Link href="/about" className="hover:text-surface-white transition-colors">About</Link></li>
-              <li><Link href="/blog" className="hover:text-surface-white transition-colors">Blog</Link></li>
-              <li><Link href="/contact" className="hover:text-surface-white transition-colors">Contact</Link></li>
+              <li><NavLink href="/about" className="hover:text-surface-white transition-colors">About</NavLink></li>
+              <li><NavLink href="/blog" className="hover:text-surface-white transition-colors">Blog</NavLink></li>
+              <li><NavLink href="/contact" className="hover:text-surface-white transition-colors">Contact</NavLink></li>
             </ul>
           </div>
 
@@ -43,8 +45,8 @@ export function Footer() {
           <div>
             <h4 className="text-[0.875rem] font-semibold text-surface-white mb-4 uppercase tracking-[0.014px]">Legal</h4>
             <ul className="space-y-3 text-[0.875rem] tracking-[0.014px]">
-              <li><Link href="/privacy" className="hover:text-surface-white transition-colors">Privacy</Link></li>
-              <li><Link href="/terms" className="hover:text-surface-white transition-colors">Terms</Link></li>
+              <li><NavLink href="/privacy" className="hover:text-surface-white transition-colors">Privacy</NavLink></li>
+              <li><NavLink href="/terms" className="hover:text-surface-white transition-colors">Terms</NavLink></li>
             </ul>
           </div>
         </div>

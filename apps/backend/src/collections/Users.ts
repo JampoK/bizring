@@ -56,8 +56,9 @@ export const Users: CollectionConfig = {
       type: 'select',
       defaultValue: 'free',
       options: [
-        { label: 'Free', value: 'free' },
-        { label: 'Premium', value: 'premium' },
+        { label: 'Admin', value: 'admin' },
+        { label: 'Editorial', value: 'editorial' },
+        { label: 'User', value: 'user' },
       ],
       admin: { position: 'sidebar' },
     },

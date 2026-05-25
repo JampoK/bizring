@@ -1,4 +1,5 @@
 import React from 'react'
+import { Container } from './ui/Container' // Import Container
 
 interface Company {
   name: string
@@ -18,8 +19,8 @@ const companies: Company[] = [
 
 export function CompanyLogos() {
   return (
-    <section className="py-16 bg-surface-white">
-      <div className="container-default">
+    <section className="section-spacing bg-surface-white">
+      <Container>
         <p className="text-center text-sm font-medium text-stone-whisper tracking-[0.014px] mb-10">
           Trusted by innovative companies and investors worldwide
         </p>
@@ -38,7 +39,8 @@ export function CompanyLogos() {
             </div>
           ))}
         </div>
-      </div>
+      </Container>
     </section>
   )
 }
+

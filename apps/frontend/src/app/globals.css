@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@475;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -29,35 +27,6 @@
   h4 { @apply text-xl; letter-spacing: 0.01px; line-height: 1.25; }
 }
 
-@layer components {
-  .container-default {
-    @apply max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8;
-  }
-
-  .section-spacing {
-    @apply py-16 md:py-24;
-  }
-
-  .card-base {
-    @apply bg-surface-white p-8;
-  }
-
-  .skeleton {
-    @apply bg-gradient-to-r from-fog-gray via-white to-fog-gray bg-[length:200%_100%] animate-shimmer rounded-sm;
-  }
-
-  .focus-ring {
-    @apply focus:outline-none focus:shadow-focus;
-  }
-
-  .focus-ring-secondary {
-    @apply focus:outline-none focus:shadow-focus-secondary;
-  }
-
-  .focus-ring-ghost {
-    @apply focus:outline-none focus:shadow-focus-ghost;
-  }
-}
 
 @layer utilities {
   .text-balance {

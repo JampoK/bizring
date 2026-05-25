@@ -24,12 +24,35 @@ module.exports = {
         'surface-white': '#ffffff',
         'fog-gray': '#fafafa',
         'warm-mist': '#feefe8',
-        // Semantic aliases
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+      // Customer.io palette
+      // ... (existing colors)
+      
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
+      fontSize: {
+        caption: ['12px', { lineHeight: '1.38', letterSpacing: '0.017em' }],
+        'body-sm': ['14px', { lineHeight: '1.38', letterSpacing: '0.014em' }],
+        body: ['16px', { lineHeight: '1.38', letterSpacing: '0.013em' }],
+        subheading: ['20px', { lineHeight: '1.25', letterSpacing: '0.01em' }],
+        'heading-sm': ['24px', { lineHeight: '1.25', letterSpacing: '0.008em' }],
+        heading: ['36px', { lineHeight: '1.25', letterSpacing: '0.006em' }],
+        'heading-lg': ['48px', { lineHeight: '1.25', letterSpacing: '0.004em' }],
+        display: ['96px', { lineHeight: '1', letterSpacing: '0.002em' }],
+      },
+      spacing: {
+        'px': '1px',
+        '0.5': '2px',
+        '1': '4px',
+        '1.5': '6px',
+        '2': '8px', // element gap (8px)
+        '4': '16px',
+        '6': '24px',
+        '8': '32px', // card padding (32px)
+        '12': '48px',
+        '16': '64px',
+        '24': '96px', // section gap (96px)
       },
       borderRadius: {
         pill: '9999px',
@@ -37,7 +60,7 @@ module.exports = {
         img: '6px',
       },
       boxShadow: {
-        // No heavy shadows — this is a flat design system
+
         focus: '0 0 0 4px oklch(0.3068 0.046 206.34)',
         'focus-secondary': '0 0 0 4px oklch(0.97 0 0)',
         'focus-ghost': '0 0 0 4px oklch(0.9263 0.136 145.2)',
