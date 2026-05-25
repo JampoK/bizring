@@ -10,7 +10,7 @@ const seedEditorial = async () => {
     data: {
       email: 'editor@bizring.com',
       password: 'password123',
-      role: 'editorial',
+      roles: ['editorial'],
     },
   })
   console.log('Editorial user created:', editorialUser.email)
@@ -26,6 +26,7 @@ const seedEditorial = async () => {
       content: {
         root: {
           type: 'root',
+          version: 1,
           children: [
             {
               type: 'text',

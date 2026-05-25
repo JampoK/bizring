@@ -13,7 +13,7 @@ const main = async () => {
   // 2. Create Dummy Business Owner
   const owner = await payload.create({
     collection: 'users',
-    data: { name: 'Franchise Owner', email: 'owner@bizring.com', password: 'password123', roles: ['user'] }
+    data: { name: 'Franchise Owner', email: 'owner@bizring.com', password: 'password123', roles: ['business_owner'] }
   })
 
   // 3. Create Dummy Business
@@ -22,8 +22,8 @@ const main = async () => {
     data: {
       name: 'Kopi Nusantara',
       slug: 'kopi-nusantara',
-      category: 'Kuliner',
-      location: 'Jakarta',
+      category: 1, // Using ID
+      location: 1, // Using ID
       status: 'verified',
       owner: owner.id,
     }
