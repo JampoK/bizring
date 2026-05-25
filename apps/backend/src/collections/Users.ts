@@ -58,6 +58,7 @@ export const Users: CollectionConfig = {
       options: [
         { label: 'Admin', value: 'admin' },
         { label: 'Editorial', value: 'editorial' },
+        { label: 'Premium', value: 'premium' },
         { label: 'User', value: 'user' },
       ],
       admin: { position: 'sidebar' },
