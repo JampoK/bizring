@@ -14,6 +14,9 @@ import { Media } from './collections/Media'
 import Categories from './collections/Categories'
 import Locations from './collections/Locations'
 import { Insights } from './collections/Insights'
+import { Rankings } from './collections/Rankings'
+import { Inquiries } from './collections/Inquiries'
+import { BusinessDashboard } from './collections/BusinessDashboard'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -35,6 +38,9 @@ export default buildConfig({
     Categories,
     Locations,
     Insights,
+    Rankings,
+    Inquiries,
+    BusinessDashboard,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -45,8 +51,10 @@ export default buildConfig({
     pool: {
       connectionString:
         process.env.DATABASE_URL ||
-        `postgres://${process.env.DB_USER}:***@${process.env.DB_HOST}:${process.env.DB_PORT}/bizring`,
+        `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/bizring`,
     },
+    ensureSchema: true,
+    push: true,
   }),
   cors: [
     process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',

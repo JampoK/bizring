@@ -11,19 +11,9 @@ export async function getPublicBusinesses(params: {
   const result = await payload.find({
     collection: 'businesses',
     where: {
-      status: { equals: 'verified' },
+      'trust.verificationStatus': { equals: 'verified' },
       ...(params.category && { category: { equals: params.category } }),
       ...(params.location && { location: { equals: params.location } }),
-    },
-    select: { // Projection untuk keamanan DTO
-      name: true,
-      slug: true,
-      category: true,
-      location: true,
-      intents: true,
-      contact: true,
-      trust: true,
-      isPremium: true,
     },
     limit: 12,
     page: params.page || 1,

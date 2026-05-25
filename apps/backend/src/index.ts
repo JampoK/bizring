@@ -81,7 +81,7 @@ const startServer = async () => {
     try {
       const result = await payload.find({
         collection: 'businesses',
-        where: { verificationStatus: { equals: 'verified' } },
+        where: { 'trust.verificationStatus': { equals: 'verified' } },
         limit: 100,
       })
       res.json(result.docs)

@@ -54,7 +54,7 @@ export const Users: CollectionConfig = {
     {
       name: 'plan',
       type: 'select',
-      defaultValue: 'free',
+      defaultValue: 'user',
       options: [
         { label: 'Admin', value: 'admin' },
         { label: 'Editorial', value: 'editorial' },
