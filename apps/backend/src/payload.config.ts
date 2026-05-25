@@ -53,8 +53,7 @@ export default buildConfig({
         process.env.DATABASE_URL ||
         `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/bizring`,
     },
-    ensureSchema: true,
-    push: true,
+
   }),
   cors: [
     process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
