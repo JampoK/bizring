@@ -40,7 +40,7 @@ const Locations: CollectionConfig = {
         position: 'sidebar',
         description: 'For City, select its Province. For District, select its City.',
       },
-      filterOptions: ({ siblingData }) => {
+      filterOptions: ({ siblingData }: { siblingData: any }) => {
         if (siblingData.type === 'city') {
           return {
             type: {
@@ -55,7 +55,7 @@ const Locations: CollectionConfig = {
             },
           }
         }
-        return {}
+        return false // Return false instead of empty object
       },
     },
   ],

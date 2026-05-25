@@ -19,7 +19,7 @@ export async function hasPremiumEntitlement(userId: string): Promise<boolean> {
 
   // Check user premium status (assuming a field exists on User collection)
   // Adjust field name based on your schema
-  return !!user.isPremium
+  return user.plan === 'premium' && user.subscriptionStatus === 'active'
 }
 
 /**
