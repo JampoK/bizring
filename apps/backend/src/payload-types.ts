@@ -69,8 +69,16 @@ export interface Config {
   collections: {
     users: User;
     businesses: Business;
+    'franchise-opportunities': FranchiseOpportunity;
+    'verification-documents': VerificationDocument;
     'data-rooms': DataRoom;
     media: Media;
+    categories: Category;
+    locations: Location;
+    insights: Insight;
+    rankings: Ranking;
+    inquiries: Inquiry;
+    'business-dashboard': BusinessDashboard;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,8 +88,16 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     businesses: BusinessesSelect<false> | BusinessesSelect<true>;
+    'franchise-opportunities': FranchiseOpportunitiesSelect<false> | FranchiseOpportunitiesSelect<true>;
+    'verification-documents': VerificationDocumentsSelect<false> | VerificationDocumentsSelect<true>;
     'data-rooms': DataRoomsSelect<false> | DataRoomsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    locations: LocationsSelect<false> | LocationsSelect<true>;
+    insights: InsightsSelect<false> | InsightsSelect<true>;
+    rankings: RankingsSelect<false> | RankingsSelect<true>;
+    inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
+    'business-dashboard': BusinessDashboardSelect<false> | BusinessDashboardSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -129,7 +145,7 @@ export interface User {
   id: number;
   name: string;
   roles: ('admin' | 'business_owner' | 'investor')[];
-  plan?: ('free' | 'premium') | null;
+  plan?: ('admin' | 'editorial' | 'user') | null;
   subscriptionStatus?: ('active' | 'inactive' | 'past_due' | 'canceled') | null;
   updatedAt: string;
   createdAt: string;
@@ -157,8 +173,34 @@ export interface User {
 export interface Business {
   id: number;
   name: string;
+  slug?: string | null;
   description?: string | null;
+  category: number | Category;
+  location: number | Location;
   owner: number | User;
+  intents?: {
+    mencariReseller?: boolean | null;
+    mencariDistributor?: boolean | null;
+    franchiseAvailable?: boolean | null;
+    partnershipOpen?: boolean | null;
+    mencariInvestor?: boolean | null;
+  };
+  contact?: {
+    whatsapp?: string | null;
+    website?: string | null;
+    email?: string | null;
+  };
+  trust?: {
+    verified?: boolean | null;
+    verificationStatus?: ('pending' | 'reviewed' | 'verified') | null;
+    documents?:
+      | {
+          docType?: string | null;
+          file?: (number | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
   status?: ('pending' | 'verified' | 'rejected' | 'suspended') | null;
   isPremium?: boolean | null;
   featuredRank?: number | null;
@@ -170,25 +212,67 @@ export interface Business {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "data-rooms".
+ * via the `definition` "categories".
  */
-export interface DataRoom {
+export interface Category {
   id: number;
   name: string;
-  business: number | Business;
-  owner: number | User;
-  isPublic?: boolean | null;
+  slug?: string | null;
+  parent?: (number | null) | Category;
   /**
-   * Users who can access this data room
+   * Type of business opportunity this category represents.
    */
-  accessList?: (number | User)[] | null;
-  documents?:
+  categoryType:
+    | 'franchise'
+    | 'kemitraan'
+    | 'distributor'
+    | 'reseller'
+    | 'supplier'
+    | 'investor'
+    | 'grosir'
+    | 'partnership';
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Keywords and phrases for SEO optimization.
+   */
+  seoTags?:
     | {
-        name: string;
-        file: number | Media;
+        tag?: string | null;
         id?: string | null;
       }[]
     | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations".
+ */
+export interface Location {
+  id: number;
+  name: string;
+  /**
+   * Type of location (e.g., Province, City, District).
+   */
+  type: 'province' | 'city' | 'district';
+  /**
+   * For City, select its Province. For District, select its City.
+   */
+  parent?: (number | null) | Location;
   updatedAt: string;
   createdAt: string;
 }
@@ -235,6 +319,184 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "franchise-opportunities".
+ */
+export interface FranchiseOpportunity {
+  id: number;
+  business: number | Business;
+  name: string;
+  franchiseFee: number;
+  /**
+   * e.g. 100jt - 500jt
+   */
+  investmentRange: string;
+  royaltyFee?: string | null;
+  contractDuration?: number | null;
+  territory?: string | null;
+  supportDescription?: string | null;
+  status?: ('draft' | 'pending' | 'approved' | 'rejected') | null;
+  compliance?: {
+    hasSTPW?: boolean | null;
+    isIndonesianLanguageReady?: boolean | null;
+    prospectusReady?: boolean | null;
+    /**
+     * Automated compliance alerts based on missing documents or fields
+     */
+    alertMessage?: string | null;
+  };
+  /**
+   * Admin only
+   */
+  admin?: {
+    reviewedBy?: (number | null) | User;
+    reviewedAt?: string | null;
+    adminNotes?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "verification-documents".
+ */
+export interface VerificationDocument {
+  id: number;
+  business: number | Business;
+  docType: 'nib' | 'siup' | 'npwp' | 'akta' | 'others';
+  file: number | Media;
+  status?: ('pending' | 'approved' | 'rejected') | null;
+  adminNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "data-rooms".
+ */
+export interface DataRoom {
+  id: number;
+  name: string;
+  business: number | Business;
+  owner: number | User;
+  isPublic?: boolean | null;
+  /**
+   * Users who can access this data room
+   */
+  accessList?: (number | User)[] | null;
+  documents?:
+    | {
+        name: string;
+        file: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "insights".
+ */
+export interface Insight {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt?: string | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  category:
+    | 'Franchise'
+    | 'Business Ideas'
+    | 'Entrepreneurship'
+    | 'Marketing'
+    | 'Investment'
+    | 'Startup'
+    | 'Finance'
+    | 'Case Studies'
+    | 'Success Stories'
+    | 'Industry Trends';
+  featuredImage?: (number | null) | Media;
+  author?: string | null;
+  publishDate?: string | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  canonicalUrl?: string | null;
+  relatedBusinesses?: (number | Business)[] | null;
+  relatedInsights?: (number | Insight)[] | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rankings".
+ */
+export interface Ranking {
+  id: number;
+  businessName: string;
+  business: number | Business;
+  rankNumber: number;
+  score: number;
+  /**
+   * Pillar scores: Cost, Support, Financial, Growth, Brand
+   */
+  scoreBreakdown?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  summary?: string | null;
+  featured?: boolean | null;
+  editorNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries".
+ */
+export interface Inquiry {
+  id: number;
+  name: string;
+  email: string;
+  whatsapp: string;
+  franchise: number | FranchiseOpportunity;
+  intent: 'brochure' | 'availability' | 'contact' | 'application';
+  message?: string | null;
+  status?: ('new' | 'contacted' | 'completed') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Ringkasan operasional bisnis (Leads & Moderasi)
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "business-dashboard".
+ */
+export interface BusinessDashboard {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -266,12 +528,44 @@ export interface PayloadLockedDocument {
         value: number | Business;
       } | null)
     | ({
+        relationTo: 'franchise-opportunities';
+        value: number | FranchiseOpportunity;
+      } | null)
+    | ({
+        relationTo: 'verification-documents';
+        value: number | VerificationDocument;
+      } | null)
+    | ({
         relationTo: 'data-rooms';
         value: number | DataRoom;
       } | null)
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'locations';
+        value: number | Location;
+      } | null)
+    | ({
+        relationTo: 'insights';
+        value: number | Insight;
+      } | null)
+    | ({
+        relationTo: 'rankings';
+        value: number | Ranking;
+      } | null)
+    | ({
+        relationTo: 'inquiries';
+        value: number | Inquiry;
+      } | null)
+    | ({
+        relationTo: 'business-dashboard';
+        value: number | BusinessDashboard;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -347,13 +641,90 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface BusinessesSelect<T extends boolean = true> {
   name?: T;
+  slug?: T;
   description?: T;
+  category?: T;
+  location?: T;
   owner?: T;
+  intents?:
+    | T
+    | {
+        mencariReseller?: T;
+        mencariDistributor?: T;
+        franchiseAvailable?: T;
+        partnershipOpen?: T;
+        mencariInvestor?: T;
+      };
+  contact?:
+    | T
+    | {
+        whatsapp?: T;
+        website?: T;
+        email?: T;
+      };
+  trust?:
+    | T
+    | {
+        verified?: T;
+        verificationStatus?: T;
+        documents?:
+          | T
+          | {
+              docType?: T;
+              file?: T;
+              id?: T;
+            };
+      };
   status?: T;
   isPremium?: T;
   featuredRank?: T;
   verifiedAt?: T;
   verifiedBy?: T;
+  adminNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "franchise-opportunities_select".
+ */
+export interface FranchiseOpportunitiesSelect<T extends boolean = true> {
+  business?: T;
+  name?: T;
+  franchiseFee?: T;
+  investmentRange?: T;
+  royaltyFee?: T;
+  contractDuration?: T;
+  territory?: T;
+  supportDescription?: T;
+  status?: T;
+  compliance?:
+    | T
+    | {
+        hasSTPW?: T;
+        isIndonesianLanguageReady?: T;
+        prospectusReady?: T;
+        alertMessage?: T;
+      };
+  admin?:
+    | T
+    | {
+        reviewedBy?: T;
+        reviewedAt?: T;
+        adminNotes?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "verification-documents_select".
+ */
+export interface VerificationDocumentsSelect<T extends boolean = true> {
+  business?: T;
+  docType?: T;
+  file?: T;
+  status?: T;
   adminNotes?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -420,6 +791,97 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  parent?: T;
+  categoryType?: T;
+  description?: T;
+  seoTags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "locations_select".
+ */
+export interface LocationsSelect<T extends boolean = true> {
+  name?: T;
+  type?: T;
+  parent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "insights_select".
+ */
+export interface InsightsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  content?: T;
+  category?: T;
+  featuredImage?: T;
+  author?: T;
+  publishDate?: T;
+  seoTitle?: T;
+  seoDescription?: T;
+  canonicalUrl?: T;
+  relatedBusinesses?: T;
+  relatedInsights?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rankings_select".
+ */
+export interface RankingsSelect<T extends boolean = true> {
+  businessName?: T;
+  business?: T;
+  rankNumber?: T;
+  score?: T;
+  scoreBreakdown?: T;
+  summary?: T;
+  featured?: T;
+  editorNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries_select".
+ */
+export interface InquiriesSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  whatsapp?: T;
+  franchise?: T;
+  intent?: T;
+  message?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "business-dashboard_select".
+ */
+export interface BusinessDashboardSelect<T extends boolean = true> {
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
