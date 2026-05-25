@@ -15,7 +15,7 @@ export async function updateBusinessProfile(
       id: businessId,
     })
 
-    if (business.owner !== userId && !business.owner.id) { // Simple owner check
+    if ((typeof business.owner === 'object' ? business.owner.id : business.owner) !== userId) { // Simple owner check
        throw { code: 'FORBIDDEN', message: 'You do not have permission to edit this business.' }
     }
 

@@ -27,6 +27,11 @@ export interface PublicBusinessDTO {
   isPremium: boolean
 }
 
+export interface APIError {
+  code: string;
+  message: string;
+}
+
 export type APIResponse<T> = {
   data?: T
   error?: string
